@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Building{% endblock %}
+{% block head %} {% endblock %}
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+  <!-- DataTales Example -->
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Building List</h6>
+		</div> 
+		<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+			<div class="form-group row">
+				<div class="col-sm-10 mb-3 mb-sm-0">
+					<input class="form-control bg-light form-control" id="myInput" placeholder="Search" aria-controls="dataTable" type="search">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary show-form" data-url="{% url 'building_create' %}">
+						<span class="fa fa-plus"></span>New Building
+					</button>
+				</div>
+			</div>			      	
+				
+			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Reg Code</th>
+						<th>Name</th>
+						<th>Location</th>
+						<th>Telephone No</th>
+						<th>Hospital</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% include "patients/building_list_2.html" %}
+				</tbody>		
+			</table>
+				{% include "patients/includes/pagination.html" %}
+			</div>
+		</div>
+	</div>
+</div> <!-- /.container-fluid -->
+{% endblock %}      <!-- End of Main Content -->
+{% block footer_javascript %}
+	<script src ="{% static 'js/ajax_dataModal/search.js' %}"></script>
+	<script src ="{% static 'js/ajax_dataModal/crud-ajax.js' %}"></script>
+{% endblock %}

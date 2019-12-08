@@ -1,0 +1,25 @@
+{% for dtls in object_list %}
+
+<tr>
+	<td>{{ dtls.id }}</td>
+	<td>{{ dtls.wr_type }}</td>
+	<td>{{ dtls.is_ward_type }}</td>
+	<td>{{ dtls.charges }}</td>
+	<td>{{ dtls.no_of_beds }}</td>
+	<td> 
+		<button class="btn btn-success show-form-update" data-url="{% url 'wardorroomtype_update' dtls.id %}">
+			<i class="fa fa-pencil" aria-hidden="true"></i>
+			Edit 
+		</button>
+	</td>
+	<td>		
+		<button class="btn btn-danger show-form-delete" data-url="{% url 'wardorroomtype_delete' dtls.id %}">
+			<i class="fa fa-trash" aria-hidden="true"></i>
+		</button>	
+	</td>
+</tr>
+{%  empty %}
+<tr>
+	<td colspan="7" class="text-center bg-warning">No WardOrRoomType</td>
+</tr>
+{% endfor %}
