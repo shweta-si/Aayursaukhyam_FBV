@@ -8,11 +8,10 @@
 	<td> 
 
 		<button class="btn btn-success show-form-update" data-url="{% url 'building_update' dtls.id %}">
-			<i class="fa fa-pencil" aria-hidden="true"></i>
+			<i class="fa fa-edit" aria-hidden="true"></i>
 			Edit 
 		</button>
-	</td>
-	<td>		
+
 		<button class="btn btn-danger show-form-delete" data-url="{% url 'building_delete' dtls.id %}">
 			<i class="fa fa-trash" aria-hidden="true"></i>
 			Delete 
@@ -21,6 +20,6 @@
 </tr>
 {% empty %}
 <tr>
-	<td colspan="7" class="text-center bg-warning">No Building</td>
+	<td colspan="6" class="text-center bg-warning">No Building</td>
 </tr>
 {% endfor %}

@@ -1,10 +1,13 @@
 $(document).ready(function(){
 	var ShowForm = function(){
 		var btn = $(this);
+
 		$.ajax({
 			url: btn.attr("data-url"),
 			type: 'get',
-			dataType:'json',
+			dataType: 'json',
+            cache: false,
+
 			beforeSend: function(){
 				$('#dataModal').modal('show');				
 			},
@@ -15,25 +18,38 @@ $(document).ready(function(){
 		});
 	};
 
+
 	var SaveForm =  function(){
-		var form = $(this);	
+		var form = $(this);
+
+		var fd = new FormData(this);
 		$.ajax({
 			url: form.attr('data-url'),
-			data: form.serialize(),
+            data: fd,
+			//data: form.serialize(),
+
 			type: form.attr('method'),
 			dataType: 'json',
+			enctype: 'multipart/form-data',
+
+            //cache: false,
+            processData: false,
+            contentType: false,
+
 			success: function(data){
 				if(data.form_is_valid){
+				    console.log(data);
 					$('#dataTable tbody').html(data.data_list);
 					$('#dataModal').modal('hide');
 				} else {
 					$('#dataModal .modal-content').html(data.html_form)
 				}
 			}
-		})
+		});
 		return false;
 		
-	}
+	};
+
 
 // create 
 $(".show-form").click(ShowForm);

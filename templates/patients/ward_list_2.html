@@ -1,0 +1,24 @@
+{% for dtls in object_list %}
+<tr>
+	<td>{{ dtls.id }}</td>
+	<td>{{ dtls.ward_no}} | {{dtls.floor }}</td>
+	<td>{{ dtls.ward_extension }}</td>
+	<td>{{ dtls.status }}</td>
+	<td>{{ dtls.wr_type }}</td>
+	<td>{{ dtls.building }} </td>
+	<td>
+		<button class="btn btn-success show-form-update" data-url="{% url 'ward_update' dtls.id %}">
+			<i class="fa fa-edit" aria-hidden="true"></i>
+			Edit 
+		</button>
+		<button class="btn btn-danger show-form-delete" data-url="{% url 'ward_delete' dtls.id %}">
+			<i class="fa fa-trash" aria-hidden="true"></i>
+			Delete 
+		</button>	
+	</td>
+</tr>
+{% empty %}
+<tr>
+	<td colspan="7" class="text-center bg-warning">No Records Found</td>
+</tr>
+{% endfor %}

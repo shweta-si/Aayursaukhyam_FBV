@@ -1,0 +1,61 @@
+{% load crispy_forms_tags %}
+<form method="post" data-url="{% url 'patient_create' %}" class="create-form">
+	{% csrf_token %}
+		<div class="modal-header">
+		<h5 class="modal-title" >Create Patient</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+		</div>
+		<div class="modal-body">
+            {{form|crispy}}
+<!--               <div class="form-row">
+                      <div class="form-group col-md-4 mb-0">
+                        {{ form.first_name|as_crispy_field }}
+                      </div>
+                      <div class="form-group col-md-4 mb-0">
+                        {{ form.middle_name|as_crispy_field }}
+                      </div>
+                      <div class="form-group col-md-4 mb-0">
+                        {{ form.last_name|as_crispy_field }}
+                      </div>
+                </div>--->
+                <!--<input type="text" class="form-control datetimepicker-input" id="datetimepicker1" data-toggle="datetimepicker" data-target="#datetimepicker1"/>-->
+
+
+                 <!--<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                    {{ form.date_of_birth }}
+                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                 </div>-->
+              <!--  <div class="form-row">
+                     <div class="form-group col-md-4 mb-0">
+                        {{ form.blood_group|as_crispy_field }}
+                     </div>
+                </div>
+                <div class="form-row">
+                     <div class="form-group col-md-12 mb-0">
+                        {{ form.gender|as_crispy_field }}
+                     </div>
+                 </div>
+                <div class="form-row">
+                     <div class="form-group col-md-12 mb-0">
+                        {{ form.telephone_line1|as_crispy_field }}
+                     </div>
+                 </div>
+                <div class="form-row">
+                     <div class="form-group col-md-12 mb-0">
+                        {{ form.bed_no|as_crispy_field }}
+                     </div>
+                 </div>-->
+
+
+
+
+		</div>
+		<div class="modal-footer">
+		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		<button type="submit" class="btn btn-primary">add Patient</button>
+		</div>
+</form>

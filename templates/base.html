@@ -17,6 +17,9 @@
   <!-- Custom styles for this template-->
   <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
 
+
+{% block head_css %}
+{% endblock %}
 </head>
 
 <body id="page-top">
@@ -64,23 +67,28 @@
             <h6 class="collapse-header"></h6>
             <a class="collapse-item" href="{% url  'hospital_list' %}">Hospital</a>
             <a class="collapse-item" href="{% url  'building_list' %}">Building</a>
+            <a class="collapse-item" href="{% url  'wardorroomtype_list' %}">Ward or Room Type</a>
+            <a class="collapse-item" href="{% url  'room_list' %}">Room</a>
+            <a class="collapse-item" href="{% url  'ward_list' %}">Ward</a>
+            <a class="collapse-item" href="{% url  'bed_list' %}">Bed</a>
           </div>
+
         </div>
       </li>
 
       <!-- Nav Item - Utilities Collapse Menu -->
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
-          <i class="fas fa-fw fa-wrench"></i>
-          <span>Utilities</span>
+            <i class="fas fa-fw fa-wrench"></i>
+            <span>Patient</span>
         </a>
         <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Custom Utilities:</h6>
-            <a class="collapse-item" href="utilities-color.html">Colors</a>
-            <a class="collapse-item" href="utilities-border.html">Borders</a>
-            <a class="collapse-item" href="utilities-animation.html">Animations</a>
-            <a class="collapse-item" href="utilities-other.html">Other</a>
+            <h6 class="collapse-header">Patient:</h6>
+            <a class="collapse-item" href="{% url  'patient_list' %}">Patient</a>
+            <a class="collapse-item" href="#">Patient Visit List</a>
+            <a class="collapse-item" href="#">Prescription</a>
+            <a class="collapse-item" href="#">Appointment</a>
           </div>
         </div>
       </li>
@@ -97,18 +105,21 @@
       <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
           <i class="fas fa-fw fa-folder"></i>
-          <span>Pages</span>
+          <span>Staff Details</span>
         </a>
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="{% url 'login' %}">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+            <h6 class="collapse-header">Employees:</h6>
+            <a class="collapse-item" href="#">Employee List</a>
+            <a class="collapse-item" href="#">Leaves</a>
+            <a class="collapse-item" href="#">Employee Payslip</a>
+            <h6 class="collapse-header">Health Professional:</h6>
+            <a class="collapse-item" href="#">Health Professional </a>
+            <a class="collapse-item" href="{% url 'department_list' %}">Department</a>
+            <a class="collapse-item" href="{% url 'designation_list' %}">Designation</a>
+            <a class="collapse-item" href="{% url 'dept_manager_list' %}">Department Manager</a>
             <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
+
           </div>
         </div>
       </li>
@@ -366,7 +377,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave? Hi {{user.username}}  </h5>
+          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave? Hi {{ user.username }}  </h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>

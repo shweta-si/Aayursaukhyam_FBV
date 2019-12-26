@@ -1,14 +1,14 @@
 {% for dtls in object_list %}
 <tr>
 	<td>{{ dtls.id }}</td>
-	<td>{{ dtls.registration_code }}</td>
+	<td>{{ dtls.reg_code }}</td>
 	<td>{{ dtls.name }}</td>
 	<td>{{ dtls.location }}</td>
 	<td>{{ dtls.contact_no }}</td>
-	<td >
+	<td>
 
 		<button class="btn btn-success show-form-update" data-url="{% url 'hospital_update' dtls.id %}">
-			<i class="fa fa-pencil" aria-hidden="true"></i>
+			<i class="fa fa-edit" aria-hidden="true"></i>
 			Edit 
 		</button>
 

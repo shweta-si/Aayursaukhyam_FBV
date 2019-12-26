@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %} Patient {% endblock %}
+
+{% block head_css %}
+ <!-- 2 CSS files Required for  tempusdominus-bootstrap DatetimePicker
+  1. font-awesome/4.7.0/css/font-awesome.min.css
+  2. tempusdominus-bootstrap-4.min.css
+  -->
+<!-- For DAL -->
+<link href="{% static 'date_time_picker/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" type="text/css">
+
+{% endblock %}
+
+{% block content %}
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+  <!-- DataTales Example -->
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Patient List</h6>
+		</div> 
+		<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="exampleModal" aria-hidden="true">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content"></div>
+			</div>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+			<div class="form-group row">
+				<div class="col-sm-10 mb-3 mb-sm-0">
+					<input class="form-control bg-light form-control" id="myInput" placeholder="Search" aria-controls="dataTable" type="search">
+				</div>
+				<div class="col-sm-2">
+					<button class="btn btn-primary show-form" data-url="{% url 'patient_create' %}">
+						<i class="fa fa-plus" aria-hidden="true"></i> New Patient
+					</button>
+				</div>
+			</div>			      	
+				
+			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>Full Name</th>
+						<th>Date Of Birth</th>
+						<th>Blood Group</th>
+						<th>gender</th>
+						<th>Telephone No</th>
+						<th>Bed No</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% include "patients/patient_list_2.html" %}
+				</tbody>		
+			</table>
+				{% include "patients/includes/pagination.html" %}
+			</div>
+		</div>
+	</div>
+</div> <!-- /.container-fluid -->
+{% endblock %}      <!-- End of Main Content -->
+
+{% block footer_javascript %}
+<script src ="{% static 'js/ajax_dataModal/search.js' %}"></script>
+<script src ="{% static 'js/ajax_dataModal/crud-ajax.js' %}"></script>
+<!--
+for DAL
+<script src ="{% static 'autocomplete_light/autocomplete.init.js' %}"></script>
+<script src ="{% static 'autocomplete_light/forward.js' %}"></script>
+<script src ="{% static 'autocomplete_light/jquery.init.js' %}"></script>
+<script src ="{% static 'autocomplete_light/jquery.post-setup.js' %}"></script>-->
+<!--<script>
+$.fn.datetimepicker.Constructor.Default = $.extend({}, $.fn.datetimepicker.Constructor.Default, {
+            icons: {
+                time: 'far fa-clock',
+                date: 'far fa-calendar',
+                up: 'far fa-arrow-up',
+                down: 'far fa-arrow-down',
+                previous: 'far fa-chevron-left',
+                next: 'far fa-chevron-right',
+                today: 'far fa-calendar-check-o',
+                clear: 'far fa-trash',
+                close: 'far fa-times'
+            } });
+</script>-->
+<!--<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.23.0/moment.min.js" integrity="sha256-VBLiveTKyUZMEzJd6z2mhfxIqz3ZATCuVMawPZGzIfA=" crossorigin="anonymous"></script>-->
+
+ <!-- Js file Required for
+ 1. moment.min.js
+ 2. tempusdominus-bootstrap-4.min.js
+ tempusdominus-bootstrap DatetimePicker -->
+<script src="{% static 'date_time_picker/moment.min.js' %}"></script>
+<script src="{% static 'date_time_picker/tempusdominus-bootstrap-4.min.js' %}"></script>
+
+
+<!--<script>
+$(function () {
+          $('#datetimepicker11').datetimepicker({
+               format: 'L'
+                });
+            });
+</script>-->
+
+{% endblock %}

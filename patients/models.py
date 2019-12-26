@@ -1,7 +1,10 @@
 from django.db import models
-# from django.contrib.auth.models import User
+#from django.urls import reverse
+#from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
-#from audit_log.models.fields import CreatingUserField, CreatingSessionKeyField, LastUserField, LastSessionKeyField
+from .validators import *  #custom validators ----> validators.py in your app -patient
+
+
 
 GENDER_CHOICES = [('Male', 'Male'), ('Female', 'Female')]
 BLOOD_GROUP_CHOICES = [('Not Known', 'Not Known'), ('A+', 'A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'), ('AB+', 'AB+'), ('AB-', 'AB-'),
@@ -9,14 +12,17 @@ BLOOD_GROUP_CHOICES = [('Not Known', 'Not Known'), ('A+', 'A+'), ('A-', 'A-'), (
 MODE_OF_PAYMENT_CHOICES = [('Cash', 'Cash'), ('Debit Card', 'Debit Card'), ('Credit Card', 'Credit Card')]
 ROLE_CHOICES = [('Health Professional', 'Health Professional'),('Nurse', 'Nurse'), ('Aaya', 'Aaya'), ('WardBoy', 'WardBoy')]
 APPOINTMENT_MODE_CHOICES = [('By Phone', 'By Phone'), ('By Email', 'By Email'), ('By Self', 'By Self')]
+
+
 # Create your models here.
 class Hospital(models.Model):
-    registration_code = models.CharField(max_length=16)
+    reg_code = models.CharField(max_length=16)
     name = models.CharField(max_length=50)
     location = models.TextField()
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10,12}$',
                                  message="Phone number must be entered in the format: '99999999999'. Minimum 10 to Maximum 14 digits allowed.")
     contact_no = models.CharField(validators=[phone_regex], max_length=15)
+    #photo = models.FileField(upload_to='hospital/pics/')
     #created_at = models.DateTimeField(auto_now_add=True)
     #updated_at = models.DateTimeField(auto_now=True)
     #created_by = CreatingUserField(related_name="hospital_created")
@@ -46,6 +52,7 @@ class WardOrRoomType(models.Model):
     is_ward_type = models.BooleanField()
     charges = models.DecimalField(max_digits=10, decimal_places=2)
     no_of_beds = models.PositiveIntegerField()
+
 
     def __str__(self):
         return self.wr_type
@@ -88,16 +95,19 @@ class Ward(models.Model):
 
 class Patient(models.Model):
     first_name = models.CharField(max_length=30)
-    middle_name = models.CharField(max_length=30, blank=True, null=True)
+    middle_name = models.CharField(max_length=30, default=' ')
     last_name = models.CharField(max_length=30)
     date_of_birth = models.DateField(blank=True, null=True)
-    blood_group = models.CharField(max_length=10, choices=BLOOD_GROUP_CHOICES, default='Not Known')
-    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='Male')
+    blood_group = models.CharField(max_length=15, choices=BLOOD_GROUP_CHOICES, default='Not Known')
+    gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='Female')
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{10,12}$',
+                                 message="Phone number must be entered in the format: '99999999999'. Minimum 10 to Maximum 14 digits allowed.")
+    telephone_line1 = models.CharField(validators=[phone_regex], max_length=15)
     bed_no = models.ForeignKey(Bed, on_delete=models.CASCADE, related_name="patient_bedno")
 
     @property
     def full_name(self):
-        if self.middle_name == '':
+        if self.middle_name == ' ':
             return "%s %s" % (self.first_name, self.last_name)
         else:
             return '%s %s %s' % (self.first_name, self.middle_name, self.last_name)
@@ -108,6 +118,7 @@ class Patient(models.Model):
             if val:
                 setattr(self, field_name, val.capitalize())
         super(Patient, self).save(*args, **kwargs)
+
 
     def __str__(self):
         return self.full_name
@@ -129,8 +140,8 @@ class Designation(models.Model):
 class Employee(models.Model):
     name = models.CharField(max_length=30)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='Male')
-    blood_group = models.CharField(max_length=6, choices=BLOOD_GROUP_CHOICES)
-    photo = models.FileField(upload_to='employee_profiles', null=True, blank=True)
+    blood_group = models.CharField(max_length=15, choices=BLOOD_GROUP_CHOICES)
+    photo = models.FileField(upload_to='employee/pics/', null=True, blank=True, validators=[validate_image_extension])
     address = models.TextField()
     email_id = models.EmailField()
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10,12}$',
@@ -140,16 +151,24 @@ class Employee(models.Model):
     #bank_account_no = models.CharField(max_length=15)
     #pf_account_no = models.CharField(max_length=15)
     #city = models.TextField()
-    role = models.CharField(max_length=6, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)
+
+    #def get_absolute_url(self):
+        #return reverse('patients:employee_list')
+
+
+    def __str__(self):
+        return self.name
 
 
 class DeptManager(models.Model):
     dept_no = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="Employee_DeptManager_no")
-    #emp_no = models.Foreignkey(Employee, on_delele=models.CASCADE, related_name='employee_no')
     from_date = models.DateField()
     to_date = models.DateField()
+    emp_no = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="employee_no")
     desg_id = models.ForeignKey(Designation, on_delete=models.CASCADE, related_name="Designation_DeptManager_name")
-
+    def __str__(self):
+        return self.dept_no
 
 # how to calculate health professional pay
 class EmployeePayslip(models.Model):
@@ -172,7 +191,6 @@ class EmployeePayslip(models.Model):
     def __str__(self):
         return self.employee_name
 
-
     @property
     def full_name(self):
         if self.middle_name == '':
@@ -189,7 +207,6 @@ class DrugForm(models.Model):
     name = models.CharField(max_length=15, null=True, blank=True)  # Form
     abbreviation = models.CharField(max_length=5, unique=True)
 
-
     def __str__(self):
         return self.abbreviation
 
@@ -204,7 +221,7 @@ class Dose(models.Model):
 
 class DoseUnit(models.Model):
     name = models.CharField(max_length=6, null=True, blank=True)  # Unit -ml
-    drugform = models.ForeignKey(DrugForm, on_delete=models.CASCADE, related_name="DrugForm_DoseUnit_related")
+    drug_form = models.ForeignKey(DrugForm, on_delete=models.CASCADE, related_name="DrugForm_DoseUnit_related")
 
     def __str__(self):
         return self.name
@@ -235,7 +252,7 @@ class Medicament(models.Model):
     # dosage = models.ForeignKey(MedicationDosage) # Dosage Instructions
     drug_form = models.ForeignKey(DrugForm, on_delete=models.CASCADE, related_name='DrugForm_Medicament_related')
     dose = models.ForeignKey(Dose, on_delete=models.CASCADE, related_name='Dose_Medicament_related')
-    doseunit = models.ForeignKey(DoseUnit, on_delete=models.CASCADE, related_name='DoseUnit_Medicament_related')
+    dose_unit = models.ForeignKey(DoseUnit, on_delete=models.CASCADE, related_name='DoseUnit_Medicament_related')
 
     def __str__(self):
         return self.name
@@ -257,17 +274,10 @@ class MedicamentPackRate(models.Model):
 
 
 class MedicamentCharges(models.Model):
-    medicament = models.ForeignKey(Medicament,on_delete=models.CASCADE, related_name='Medicament_MedicamentCharges_related' )
+    medicament = models.ForeignKey(Medicament, on_delete=models.CASCADE, related_name='Medicament_MedicamentCharges_related' )
     qty = models.PositiveIntegerField()
-    pack = models.ForeignKey(Pack,on_delete=models.CASCADE, related_name='Pack_MedicamentCharges_related' )
+    pack = models.ForeignKey(Pack, on_delete=models.CASCADE, related_name='Pack_MedicamentCharges_related' )
     amount = models.DecimalField(max_digits=16, decimal_places=2, default=0)
-    def __str__(self):
-        return self.id
-
-class MedicamentBillCharges(models.Model):
-    #Bill = models.ForeignKey(MedicamentBill)
-    medicament_charges = models.ForeignKey(MedicamentCharges, on_delete=models.CASCADE, related_name='Medicament_bill_charges')
-    #medicament_charges = models.ManyToManyField(MedicamentCharges, through='MedicamentBill_related')
 
     def __str__(self):
         return self.id
@@ -277,14 +287,27 @@ class MedicamentBill(models.Model):
     healthprofessional = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='Employee_MedicamentBill_related')
     mode_of_payment = models.CharField(max_length=20, choices=MODE_OF_PAYMENT_CHOICES)
     date = models.DateField()
+    medicament = models.ManyToManyField('self', through='MedicamentCharges', symmetrical=False, related_name='Medicament_MedicamentCharges_related' )
+    #medicament_charges = models.ManyToManyField(MedicamentCharges, through='MedicamentCharges')
     total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
     def __str__(self):
         return self.id
+
+#class MedicamentBillCharges(models.Model):
+    #Bill = models.ForeignKey(MedicamentBill)
+    #medicament_charges = models.ForeignKey(MedicamentCharges, on_delete=models.CASCADE, related_name='Medicament_bill_charges')
+    #medicament_charges = models.ManyToManyField(MedicamentCharges, through='MedicamentBill_related')
+
+    #def __str__(self):
+        #return self.id
+
+
 
 class Appointment(models.Model):
     appointment_date_taken =models.DateTimeField()
     appointment_mode = models.CharField(max_length=15, choices=APPOINTMENT_MODE_CHOICES, default='By Phone')
-    appointment_date_time = models.DateTimeField()
+    #appointment_date_time = models.DateTimeField()
     #appointment_time = models.TimeField()
     # CATEGORY_APP_TYPE = (('OPD', 'OPD'), ('IPD', 'IPD'))
     # type = models.CharField(max_length=10, choices= CATEGORY_APP_TYPE, default = 'OPD')
@@ -298,8 +321,8 @@ class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='Patient_Appointment_related')
 
 class PatientVisits(models.Model):
-    name = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='Patient_PatientVisits_related')
-    date = models.DateField()
+    patient = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='Patient_PatientVisits_related')
+    #date = models.DateField()
     chief_complaints = models.TextField()  # new complaint
     diagnosis = models.TextField()
     blood_pressure = models.CharField(max_length=6, null=True, blank=True, default='80/120')
@@ -324,7 +347,7 @@ class Prescription(models.Model):
     #drug_form = models.ForeignKey(DrugForm, on_delete=models.CASCADE, related_name='Drug')  # Tablet, Capsule
     medicament = models.ForeignKey(Medicament, on_delete=models.CASCADE, related_name='Medicament_Prescription_related')
     #medicament = models.ManyToManyField(Medicament, through='Medicament_Prescription')
-    #medication_dosage = models.ForeignKey(MedicationDosage)
+    medication_dosage = models.ForeignKey(MedicationDosage, on_delete=models.CASCADE, related_name='MedicationDosage_Prescription_related')
     qty = models.IntegerField()
     other_advice = models.CharField(max_length=30, null=True, blank=True)
 

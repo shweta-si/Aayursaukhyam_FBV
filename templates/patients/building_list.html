@@ -1,11 +1,20 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %} Building{% endblock %}
-{% block head %} {% endblock %}
+
 {% block content %}
 <!-- Begin Page Content -->
 <div class="container-fluid">
-  <!-- DataTales Example -->
+	<!--<div class="row">
+	<form method="get" action="{% url 'employee_create' %}">
+		<div class="form-group">
+			<div class="col-md-4">
+	           {{ form.ward_no }}
+	        </div>
+        </div>
+   	</form>
+	</div>-->
+  <!-- DataTables Example -->
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
 			<h6 class="m-0 font-weight-bold text-primary">Building List</h6>
@@ -23,7 +32,7 @@
 				</div>
 				<div class="col-sm-2">
 					<button class="btn btn-primary show-form" data-url="{% url 'building_create' %}">
-						<span class="fa fa-plus"></span>New Building
+						<i class="fa fa-plus" aria-hidden="true"></i> New Building
 					</button>
 				</div>
 			</div>			      	
@@ -32,7 +41,6 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>Reg Code</th>
 						<th>Name</th>
 						<th>Location</th>
 						<th>Telephone No</th>

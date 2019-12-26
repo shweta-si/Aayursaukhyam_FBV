@@ -13,9 +13,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+#from dal import autocomplete
+#(3.)File Uploading - needs following 2 imports
+from django.conf import settings
+from django.conf.urls.static import static
+#from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views
+
+#from . import views  #for autocomplete view
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,6 +42,12 @@ urlpatterns = [
     path('password_reset/done/', views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
+    #path('test-autocomplete/$', autocomplete.Select2QuerySetView.as_view(model=TModel), name='select2_fk',),
+
     #path('login', auth_views.LoginView.as_view(),{'template_name':'registration/login.html'}, name ='login'),
     #path('logout', auth_views.LogoutView.as_view(),{'template_name':'registration/logout.html'}, name ='logout'),
-]
+    ]
+#(3.)File Uploading
+if settings.DEBUG:
+    #urlpatterns += staticfiles_urlpatterns()
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
