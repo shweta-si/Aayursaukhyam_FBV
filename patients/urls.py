@@ -56,7 +56,7 @@ urlpatterns = [
     re_path(r'^employee/$', views.employee_list, name='employee_list'),
     re_path(r'^employee/create$', views.employee_create, name='employee_create'),
 
-    re_path(r'^employee/(?P<id>\d+)/update$', views.employee_update, name='employee_update'),
+    re_path(r'^employee/(?P<id>.*)/update$', views.employee_update, name='employee_update'),
     re_path(r'^employee/(?P<id>\d+)/delete$', views.employee_delete, name='employee_delete'),
 
     re_path(r'^dept_manager/$', views.dept_manager_list, name='dept_manager_list'),

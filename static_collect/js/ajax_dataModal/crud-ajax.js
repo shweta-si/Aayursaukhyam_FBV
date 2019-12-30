@@ -6,9 +6,7 @@ $(document).ready(function(){
 			url: btn.attr("data-url"),
 			type: 'get',
 			dataType: 'json',
-
             cache: false,
-
 
 			beforeSend: function(){
 				$('#dataModal').modal('show');				
@@ -38,18 +36,19 @@ $(document).ready(function(){
             processData: false,
             contentType: false,
 
-			success: function(data){
+			success: function(data, jqXHR){
 				if(data.form_is_valid){
-					$('#dataTable tbody').html(data.data_list);
+				    $('#dataTable tbody').html(data.data_list);
 					$('#dataModal').modal('hide');
 				} else {
 					$('#dataModal .modal-content').html(data.html_form)
 				}
 			}
-		})
+
+		});
 		return false;
 		
-	}
+	};
 
 
 // create 

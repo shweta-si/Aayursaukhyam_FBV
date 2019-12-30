@@ -1,7 +1,7 @@
 {% load crispy_forms_tags %}
 <form method="POST"  enctype="multipart/form-data" data-url="{% url 'employee_update' form.instance.id %}"  class="update-form">
 	{% csrf_token %}
-	print({% url 'employee_update' form.instance.id %})
+
 	<div class="modal-header">
 	<h5 class="modal-title" >Update employee</h5>
 	<button type="button" class="close" data-dismiss="modal" aria-label="Close">

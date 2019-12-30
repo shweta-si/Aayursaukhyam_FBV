@@ -1,5 +1,6 @@
 from django.db import models
-#from django.urls import reverse
+#from django.core.urlresolvers import reverse
+from django.urls import reverse
 #from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 from .validators import *  #custom validators ----> validators.py in your app -patient
@@ -153,8 +154,17 @@ class Employee(models.Model):
     #city = models.TextField()
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
+    def get_absolute_url(self):
+        return reverse('employee_list')
+
+    def save(self, *args, **kwargs):
+        self.photo = self.photo.name
+        super(Employee, self).save(*args, **kwargs)
+
     #def get_absolute_url(self):
-        #return reverse('patients:employee_list')
+        #return reverse('category_detail', kwargs={'slug': self.slug})
+
+
 
 
     def __str__(self):
