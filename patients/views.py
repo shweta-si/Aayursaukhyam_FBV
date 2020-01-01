@@ -31,24 +31,33 @@ def home(request):
 
 
 def save_all(request, form, tbl_name, page_name, template_name):
+    #print(request, form, tbl_name, page_name, template_name)
     data = dict()
     #pg = request.META.get('HTTP_REFERER')  #http://127.0.0.1:8000/hospital/?page=2
     #print(form)
 
+
     if request.method == 'POST':
         if form.is_valid():
-            if(request.FILES == None):
-                form.save()             #print("n",request.FILES) < MultiValueDict: {} >
-            else:
-                form.save(commit=True)  #<MultiValueDict: {'photo': [<InMemoryUploadedFile: ui-icons_777620_256x240.png (image/png)>]}>
+            #if(request.FILES == None):
+                #form.save()
+                #print("n",request.FILES) #< MultiValueDict: {} >
+            #else:
+            form.save(commit=True)
+
+                #print("nw", request.FILES)
+                #<MultiValueDict: {'photo': [<InMemoryUploadedFile: ui-icons_777620_256x240.png (image/png)>]}>
             data['form_is_valid'] = True
             queryset_list = tbl_name.objects.order_by('-id')
             queryset = pg_records(request, queryset_list, 10)
             context = {'object_list': queryset}
+
             data['data_list'] = render_to_string('patients/' + str(page_name) + '_list_2.html', context)
+            print(data)
         else:
             data['form_is_valid'] = False
     context = {'form': form}
+
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
@@ -471,7 +480,7 @@ def employee_update(request, id):
     tbl_name = Employee
     page_name = "employee"
     if request.method == 'POST':
-        form = EmployeeForm(request.POST or None, instance=instance)
+        form = EmployeeForm(request.POST or None, request.FILES or None, instance=instance)
     else:
         form = EmployeeForm(instance=instance)
     return save_all(request, form, tbl_name, page_name, 'patients/employee_update.html')

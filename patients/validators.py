@@ -5,4 +5,4 @@ def validate_image_extension(value):
     extn = os.path.splitext(value.name)[1]
     valid_extensions = ['.jpg', '.png', '.jpeg']
     if not extn.lower() in valid_extensions:
-        raise ValidationError('Unsupported file extension.')
+        raise ValidationError(u'Unsupported file extension.')

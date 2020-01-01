@@ -154,12 +154,17 @@ class Employee(models.Model):
     #city = models.TextField()
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-    def get_absolute_url(self):
-        return reverse('employee_list')
+    @property
+    def photo_url(self):
+        if self.photo and hasattr(self.photo,'url'):
+            return self.photo.url
 
-    def save(self, *args, **kwargs):
-        self.photo = self.photo.name
-        super(Employee, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.name
+
+    #def get_absolute_url(self):
+        #return reverse('employee_list')
+
 
     #def get_absolute_url(self):
         #return reverse('category_detail', kwargs={'slug': self.slug})
@@ -167,8 +172,7 @@ class Employee(models.Model):
 
 
 
-    def __str__(self):
-        return self.name
+
 
 
 class DeptManager(models.Model):

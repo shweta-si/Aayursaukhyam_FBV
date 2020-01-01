@@ -6,10 +6,10 @@ $(document).ready(function(){
 			url: btn.attr("data-url"),
 			type: 'get',
 			dataType: 'json',
-            cache: false,
+            //cache: false,
 
 			beforeSend: function(){
-				$('#dataModal').modal('show');				
+			    $('#dataModal').modal('show');
 			},
 			success: function(data){
 				$('#dataModal .modal-content').html(data.html_form);

@@ -207,7 +207,7 @@ class EmployeeForm(ModelForm):
                                                              {'class': "form-control form-control-sm"}))
     blood_group = forms.ChoiceField(choices=BLOOD_GROUP_CHOICES, widget=forms.Select(attrs=
                                                   {'class' : "form-control form-control-sm"}))
-    photo = forms.FileField(widget=forms.FileInput(attrs={'type': 'file'}))
+    photo = forms.FileField(widget=forms.FileInput(attrs={'type': 'file'}), required=False)
     address = forms.CharField(widget=forms.Textarea(attrs=
                                           {'rows': "1", 'cols': "25",
                                            'class': "form-control form-control-sm"}), required=False)
@@ -222,9 +222,9 @@ class EmployeeForm(ModelForm):
         model = Employee
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        super(EmployeeForm, self).__init__(*args, *kwargs)
-        self.fields['photo'].required = False
+    #def __init__(self, *args, **kwargs):
+        #super(EmployeeForm, self).__init__(*args, *kwargs)
+        #self.fields['photo'].required = False
 
 class DeptManagerForm(ModelForm):
     dept_no = forms.ModelChoiceField(queryset=Department.objects.all(),

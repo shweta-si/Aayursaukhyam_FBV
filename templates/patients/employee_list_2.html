@@ -4,7 +4,7 @@
 	<td>{{ dtls.name }}</td>
 	<td>{{ dtls.gender }}</td>
 	<td>{{ dtls.blood_group }}</td>
-	{% if dtls.photo.name %}
+	{% if dtls.photo.name %} {{Employee.logo.url }}
 	<td><a href="/media/{{ dtls.photo.name }}" target="_blank"><img class="img-profile rounded-circle" src="/media/{{ dtls.photo.name }}" width="50" height="50"/></a></td>
 	{% endif %}
 	<td>{{ dtls.address }} {{ dtls.email_id }} {{ dtls.telephone_line1 }}</td>
