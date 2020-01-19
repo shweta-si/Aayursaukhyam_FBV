@@ -34,8 +34,6 @@ def save_all(request, form, tbl_name, page_name, template_name):
     #print(request, form, tbl_name, page_name, template_name)
     data = dict()
     #pg = request.META.get('HTTP_REFERER')  #http://127.0.0.1:8000/hospital/?page=2
-    #print(form)
-
 
     if request.method == 'POST':
         if form.is_valid():
@@ -43,21 +41,16 @@ def save_all(request, form, tbl_name, page_name, template_name):
                 #form.save()
                 #print("n",request.FILES) #< MultiValueDict: {} >
             #else:
-            form.save(commit=True)
-
-                #print("nw", request.FILES)
+            form.save(commit=True)          #print("nw", request.FILES)
                 #<MultiValueDict: {'photo': [<InMemoryUploadedFile: ui-icons_777620_256x240.png (image/png)>]}>
             data['form_is_valid'] = True
             queryset_list = tbl_name.objects.order_by('-id')
             queryset = pg_records(request, queryset_list, 10)
             context = {'object_list': queryset}
-
             data['data_list'] = render_to_string('patients/' + str(page_name) + '_list_2.html', context)
-            print(data)
         else:
             data['form_is_valid'] = False
     context = {'form': form}
-
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
@@ -101,7 +94,6 @@ def hospital_delete(request, id):
         context = {'object_list': queryset}
         data['data_list'] = render_to_string('patients/hospital_list_2.html', context)
     else:
-
         context = {'instance': instance}
         data['html_form'] = render_to_string('patients/hospital_delete.html', context, request=request)
     return JsonResponse(data)
@@ -589,4 +581,235 @@ def drug_form_delete(request, id):
         data['html_form'] = render_to_string('patients/drug_form_delete.html', context, request=request)
     return JsonResponse(data)
 
+def dose_list(request):
+    queryset_list = Dose.objects.order_by('-id')
+    queryset = pg_records(request, queryset_list, 10)
+    context = {'object_list': queryset}
+    return render(request, 'patients/dose_list.html', context)
 
+
+def dose_create(request):
+    tbl_name = Dose
+    page_name = "dose"
+    if request.method == 'POST':
+        form = DoseForm(request.POST)
+    else:
+        form = DoseForm()
+    return save_all(request, form, tbl_name, page_name, 'patients/dose_create.html')
+
+
+def dose_update(request, id):
+    instance = get_object_or_404(Dose, id=id)
+    tbl_name = Dose
+    page_name = "dose"
+    if request.method == 'POST':
+        form = DoseForm(request.POST, instance=instance)
+    else:
+        form = DoseForm(instance=instance)
+    return save_all(request, form, tbl_name, page_name, 'patients/dose_update.html')
+
+
+def dose_delete(request, id):
+    data = dict()
+    instance = get_object_or_404(Dose, id=id)
+    if request.method == "POST":
+        instance.delete()
+        data['form_is_valid'] = True
+        queryset_list = Dose.objects.order_by('-id')
+        queryset = pg_records(request, queryset_list, 10)
+        context = {'object_list': queryset}
+        data['data_list'] = render_to_string('patients/dose_list_2.html', context)
+    else:
+        context = {'instance': instance}
+        data['html_form'] = render_to_string('patients/dose_delete.html', context, request=request)
+    return JsonResponse(data)
+
+def dose_unit_list(request):
+    queryset_list = DoseUnit.objects.order_by('-id')
+    queryset = pg_records(request, queryset_list, 10)
+    context = {'object_list': queryset}
+    return render(request, 'patients/dose_unit_list.html', context)
+
+
+def dose_unit_create(request):
+    tbl_name = DoseUnit
+    page_name = "dose_unit"
+    if request.method == 'POST':
+        form = DoseUnitForm(request.POST)
+    else:
+        form = DoseUnitForm()
+    return save_all(request, form, tbl_name, page_name, 'patients/dose_unit_create.html')
+
+
+def dose_unit_update(request, id):
+    instance = get_object_or_404(DoseUnit, id=id)
+    tbl_name = DoseUnit
+    page_name = "dose_unit"
+    if request.method == 'POST':
+        form = DoseUnitForm(request.POST, instance=instance)
+    else:
+        form = DoseUnitForm(instance=instance)
+    return save_all(request, form, tbl_name, page_name, 'patients/dose_unit_update.html')
+
+
+def dose_unit_delete(request, id):
+    data = dict()
+    instance = get_object_or_404(DoseUnit, id=id)
+    if request.method == "POST":
+        instance.delete()
+        data['form_is_valid'] = True
+        queryset_list = DoseUnit.objects.order_by('-id')
+        queryset = pg_records(request, queryset_list, 10)
+        context = {'object_list': queryset}
+        data['data_list'] = render_to_string('patients/dose_unit_list_2.html', context)
+    else:
+        context = {'instance': instance}
+        data['html_form'] = render_to_string('patients/dose_unit_delete.html', context, request=request)
+    return JsonResponse(data)
+
+def mfg_company_list(request):
+    queryset_list = MFGCompany.objects.order_by('-id')
+    queryset = pg_records(request, queryset_list, 10)
+    context = {'object_list': queryset}
+    return render(request, 'patients/mfg_company_list.html', context)
+
+
+def mfg_company_create(request):
+    tbl_name = MFGCompany
+    page_name = "mfg_company"
+    if request.method == 'POST':
+        form = MFGCompanyForm(request.POST)
+    else:
+        form = MFGCompanyForm()
+    return save_all(request, form, tbl_name, page_name, 'patients/mfg_company_create.html')
+
+
+def mfg_company_update(request, id):
+    instance = get_object_or_404(MFGCompany, id=id)
+    tbl_name = MFGCompany
+    page_name = "mfg_company"
+    if request.method == 'POST':
+        form = MFGCompanyForm(request.POST, instance=instance)
+    else:
+        form = MFGCompanyForm(instance=instance)
+    return save_all(request, form, tbl_name, page_name, 'patients/mfg_company_update.html')
+
+
+def mfg_company_delete(request, id):
+    data = dict()
+    instance = get_object_or_404(MFGCompany, id=id)
+    if request.method == "POST":
+        instance.delete()
+        data['form_is_valid'] = True
+        queryset_list = MFGCompany.objects.order_by('-id')
+        queryset = pg_records(request, queryset_list, 10)
+        context = {'object_list': queryset}
+        data['data_list'] = render_to_string('patients/mfg_company_list_2.html', context)
+    else:
+        context = {'instance': instance}
+        data['html_form'] = render_to_string('patients/mfg_company_delete.html', context, request=request)
+    return JsonResponse(data)
+
+def medication_dosage_list(request):
+    queryset_list = MedicationDosage.objects.order_by('-id')
+    queryset = pg_records(request, queryset_list, 10)
+    context = {'object_list': queryset}
+    return render(request, 'patients/medication_dosage_list.html', context)
+
+
+def medication_dosage_create(request):
+    tbl_name = MedicationDosage
+    page_name = "medication_dosage"
+    if request.method == 'POST':
+        form = MedicationDosageForm(request.POST)
+    else:
+        form = MedicationDosageForm()
+    return save_all(request, form, tbl_name, page_name, 'patients/medication_dosage_create.html')
+
+
+def medication_dosage_update(request, id):
+    instance = get_object_or_404(MedicationDosage, id=id)
+    tbl_name = MedicationDosage
+    page_name = "medication_dosage"
+    if request.method == 'POST':
+        form = MedicationDosageForm(request.POST, instance=instance)
+    else:
+        form = MedicationDosageForm(instance=instance)
+    return save_all(request, form, tbl_name, page_name, 'patients/medication_dosage_update.html')
+
+
+def medication_dosage_delete(request, id):
+    data = dict()
+    instance = get_object_or_404(MedicationDosage, id=id)
+    if request.method == "POST":
+        instance.delete()
+        data['form_is_valid'] = True
+        queryset_list = MedicationDosage.objects.order_by('-id')
+        queryset = pg_records(request, queryset_list, 10)
+        context = {'object_list': queryset}
+        data['data_list'] = render_to_string('patients/medication_dosage_list_2.html', context)
+    else:
+        context = {'instance': instance}
+        data['html_form'] = render_to_string('patients/medication_dosage_delete.html', context, request=request)
+    return JsonResponse(data)
+
+from django.http import HttpResponse
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+def get_dose_unit(request):
+    drug_form = request.GET.get('drug_form')
+    print(request.GET.get('#id_drug_form'))
+    try:
+        print("Inside try")
+        obj = DoseUnit.objects.filter(drug_form=drug_form).values('id', 'name')
+        print(obj)
+    except DoseUnit.DoesNotExist:
+        obj = None
+        print(obj)
+    jsond = json.dumps(list(obj), cls=DjangoJSONEncoder)
+    print("j"+jsond)
+    return HttpResponse(jsond, content_type='application/json')
+
+
+def medicament_list(request):
+    queryset_list = Medicament.objects.order_by('-id')
+    queryset = pg_records(request, queryset_list, 10)
+    context = {'object_list': queryset}
+    return render(request, 'patients/medicament_list.html', context)
+
+
+def medicament_create(request):
+    tbl_name = Medicament
+    page_name = "medicament"
+    if request.method == 'POST':
+        form = MedicamentForm(request.POST)
+    else:
+        form = MedicamentForm()
+    return save_all(request, form, tbl_name, page_name, 'patients/medicament_create.html')
+
+
+def medicament_update(request, id):
+    instance = get_object_or_404(Medicament, id=id)
+    tbl_name = Medicament
+    page_name = "medicament"
+    if request.method == 'POST':
+        form = MedicamentForm(request.POST, instance=instance)
+    else:
+        form = MedicamentForm(instance=instance)
+    return save_all(request, form, tbl_name, page_name, 'patients/medicament_update.html')
+
+
+def medicament_delete(request, id):
+    data = dict()
+    instance = get_object_or_404(Medicament, id=id)
+    if request.method == "POST":
+        instance.delete()
+        data['form_is_valid'] = True
+        queryset_list = Medicament.objects.order_by('-id')
+        queryset = pg_records(request, queryset_list, 10)
+        context = {'object_list': queryset}
+        data['data_list'] = render_to_string('patients/medicament_list_2.html', context)
+    else:
+        context = {'instance': instance}
+        data['html_form'] = render_to_string('patients/medicament_delete.html', context, request=request)
+    return JsonResponse(data)

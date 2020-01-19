@@ -11,6 +11,7 @@ $(document).ready(function(){
 			},
 			success: function(data, jqXHR){
 				$('#dataModal .modal-content').html(data.html_form);
+
 			}
 			
 		});
@@ -38,7 +39,8 @@ $(document).ready(function(){
 				if(data.form_is_valid){
 				    $('#dataTable tbody').html(data.data_list);
 					$('#dataModal').modal('hide');
-					//dataModal.ajax.reload();
+                    $('#dataTable tbody').html(data.data_list);
+					//$('#dataModal').ajax.reload();
 				} else {
 					$('#dataModal .modal-content').html(data.html_form)
 				}

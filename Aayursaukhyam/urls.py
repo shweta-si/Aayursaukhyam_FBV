@@ -14,17 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 #from dal import autocomplete
-#(3.)File Uploading - needs following 2 imports
-from django.conf import settings
-from django.conf.urls.static import static
+
 #from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.contrib import admin
-from django.urls import path, re_path, include
+from django.urls import path, include
 from django.contrib.auth import views
 
 #from . import views  #for autocomplete view
-
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,8 +42,12 @@ urlpatterns = [
 
 
     ]
+# (3.)File Uploading - needs following 2 imports
+from django.conf import settings
+from django.conf.urls.static import static
 #(3.)File Uploading
 if settings.DEBUG:
+
     #urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

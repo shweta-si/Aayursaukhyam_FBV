@@ -1,18 +1,16 @@
 {% for dtls in object_list %}
 <tr>
 	<td>{{ dtls.id }}</td>
-	<td>{{ dtls.reg_code }}</td>
 	<td>{{ dtls.name }}</td>
-	<td>{{ dtls.location }}</td>
-	<td>{{ dtls.contact_no }}</td>
+	<td>{{ dtls.abbreviation }}</td>
 	<td>
 
-		<button class="btn btn-success show-form-update" data-url="{% url 'hospital_update' dtls.id %}">
+		<button class="btn btn-success show-form-update" data-url="{% url 'mfg_company_update' dtls.id %}">
 			<i class="fa fa-edit" aria-hidden="true"></i>
 			Edit 
 		</button>
 
-		<button class="btn btn-danger show-form-delete" data-url="{% url 'hospital_delete' dtls.id %}">
+		<button class="btn btn-danger show-form-delete" data-url="{% url 'mfg_company_delete' dtls.id %}">
 			<i class="fa fa-trash" aria-hidden="true"></i>
 			Delete 
 		</button>	

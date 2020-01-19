@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 
 from . import views
-
+from dal import autocomplete
 urlpatterns = [
     path('', views.home, name='home'),
 
@@ -55,7 +55,6 @@ urlpatterns = [
 
     re_path(r'^employee/$', views.employee_list, name='employee_list'),
     re_path(r'^employee/create$', views.employee_create, name='employee_create'),
-
     re_path(r'^employee/(?P<id>.*)/update$', views.employee_update, name='employee_update'),
     re_path(r'^employee/(?P<id>\d+)/delete$', views.employee_delete, name='employee_delete'),
 
@@ -68,4 +67,29 @@ urlpatterns = [
     re_path(r'^drug_form/create$', views.drug_form_create, name='drug_form_create'),
     re_path(r'^drug_form/(?P<id>\d+)/update$', views.drug_form_update, name='drug_form_update'),
     re_path(r'^drug_form/(?P<id>\d+)/delete$', views.drug_form_delete, name='drug_form_delete'),
+
+    re_path(r'^dose/$', views.dose_list, name='dose_list'),
+    re_path(r'^dose/create$', views.dose_create, name='dose_create'),
+    re_path(r'^dose/(?P<id>\d+)/update$', views.dose_update, name='dose_update'),
+    re_path(r'^dose/(?P<id>\d+)/delete$', views.dose_delete, name='dose_delete'),
+
+    re_path(r'^dose_unit/$', views.dose_unit_list, name='dose_unit_list'),
+    re_path(r'^dose_unit/create$', views.dose_unit_create, name='dose_unit_create'),
+    re_path(r'^dose_unit/(?P<id>\d+)/update$', views.dose_unit_update, name='dose_unit_update'),
+    re_path(r'^dose_unit/(?P<id>\d+)/delete$', views.dose_unit_delete, name='dose_unit_delete'),
+
+    re_path(r'^mfg_company/$', views.mfg_company_list, name='mfg_company_list'),
+    re_path(r'^mfg_company/create$', views.mfg_company_create, name='mfg_company_create'),
+    re_path(r'^mfg_company/(?P<id>\d+)/update$', views.mfg_company_update, name='mfg_company_update'),
+    re_path(r'^mfg_company/(?P<id>\d+)/delete$', views.mfg_company_delete, name='mfg_company_delete'),
+
+    re_path(r'^medication_dosage/$', views.medication_dosage_list, name='medication_dosage_list'),
+    re_path(r'^medication_dosage/create$', views.medication_dosage_create, name='medication_dosage_create'),
+    re_path(r'^medication_dosage/(?P<id>\d+)/update$', views.medication_dosage_update, name='medication_dosage_update'),
+    re_path(r'^medication_dosage/(?P<id>\d+)/delete$', views.medication_dosage_delete, name='medication_dosage_delete'),
+    re_path(r'^get-dose-unit/', views.get_dose_unit, name='get_dose_unit'),
+    re_path(r'^medicament/$', views.medicament_list, name='medicament_list'),
+    re_path(r'^medicament/create$', views.medicament_create, name='medicament_create'),
+    re_path(r'^medicament/(?P<id>\d+)/update$', views.medicament_update, name='medicament_update'),
+    re_path(r'^medicament/(?P<id>\d+)/delete$', views.medicament_delete, name='medicament_delete'),
 ]

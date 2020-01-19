@@ -1,18 +1,17 @@
 $(document).ready(function(){
 	var ShowForm = function(){
 		var btn = $(this);
-
 		$.ajax({
 			url: btn.attr("data-url"),
 			type: 'get',
 			dataType: 'json',
-            //cache: false,
 
 			beforeSend: function(){
 			    $('#dataModal').modal('show');
 			},
-			success: function(data){
+			success: function(data, jqXHR){
 				$('#dataModal .modal-content').html(data.html_form);
+
 			}
 			
 		});
@@ -25,9 +24,9 @@ $(document).ready(function(){
 		var fd = new FormData(this);
 		$.ajax({
 			url: form.attr('data-url'),
-            data: fd,
-			//data: form.serialize(),
 
+			//data: form.serialize(),
+            data: fd,
 			type: form.attr('method'),
 			dataType: 'json',
 			enctype: 'multipart/form-data',
@@ -40,6 +39,8 @@ $(document).ready(function(){
 				if(data.form_is_valid){
 				    $('#dataTable tbody').html(data.data_list);
 					$('#dataModal').modal('hide');
+                    $('#dataTable tbody').html(data.data_list);
+					//$('#dataModal').ajax.reload();
 				} else {
 					$('#dataModal .modal-content').html(data.html_form)
 				}

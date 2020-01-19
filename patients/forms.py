@@ -255,10 +255,9 @@ class DrugFormForm(ModelForm):
 
 
 class DoseForm(ModelForm):
-    name = forms.CharField(widget=forms.TextInput(attrs=
-                                                  {'class': "form-control form-control-sm"}))
-    abbreviation = forms.CharField(widget=forms.TextInput(attrs=
-                                                          {'class': "form-control form-control-sm"}))
+    name = forms.CharField(widget=forms.NumberInput(attrs=
+                                                  {'min': 100, 'max': 500, 'step':100,
+                                                   'class': "form-control form-control-sm"}))
 
     class Meta:
         model = Dose
@@ -288,33 +287,64 @@ class MFGCompanyForm(ModelForm):
 class MedicationDosageForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs=
                                                   {'class': "form-control form-control-sm"}))
-    abbreviation = forms.CharField(widget=forms.TextInput(attrs=
-                                                          {'class': "form-control form-control-sm"}))
+    #abbreviation = forms.CharField(widget=forms.TextInput(attrs=
+                                                          #{'class': "form-control form-control-sm"}))
 
     class Meta:
         model = MedicationDosage
         fields = '__all__'
 
+
+# def clean_renewal_date(self):
+# #     data = self.cleaned_data['renewal_date']
+# #
+# #     # Check if a date is not in the past.
+# #     if data < datetime.date.today():
+# #         raise ValidationError(_('Invalid date - renewal in past'))
+# #
+# #     # Check if a date is in the allowed range (+4 weeks from today).
+# #     if data > datetime.date.today() + datetime.timedelta(weeks=4):
+# #         raise ValidationError(_('Invalid date - renewal more than 4 weeks ahead'))
+# #
+# #     # Remember to always return the cleaned data.
+# #     return data
 class MedicamentForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs=
                                                   {'class': "form-control form-control-sm"}))
-    mfg_company = forms.CharField(widget=forms.TextInput(attrs=
-                                                          {'class': "form-control form-control-sm"}))
-    expiry_date = forms.DateField(widget=forms.DateInput())
+    mfg_company = forms.ModelChoiceField(queryset= MFGCompany.objects.all(),
+                                     widget=forms.Select(attrs={'class': "form-control form-control-sm"}),
+                                     empty_label=None)
+    expiry_date = forms.DateField(widget=forms.TextInput(attrs={'type': 'date'}))
     batch_id = forms.CharField(widget=forms.TextInput(attrs=
                                                   {'class': "form-control form-control-sm"}))
     drug_form = forms.ModelChoiceField(queryset= DrugForm.objects.all(),
-                                     widget=forms.Select(attrs={'class': "form-control form-control-sm"}),
-                                     empty_label=None)
+                           widget=forms.Select(attrs={'onChange': "get_dose_unit", 'class': "form-control form-control-sm"}), empty_label=None)
     dose = forms.ModelChoiceField(queryset= Dose.objects.all(),
-                                     widget=forms.Select(attrs={'class': "form-control form-control-sm"}),
+                           widget=forms.Select(attrs={'class': "form-control form-control-sm"}),
                                      empty_label=None)
-    dose_unit = forms.ModelChoiceField(queryset= DoseUnit.objects.all(),
-                                     widget=forms.Select(attrs={'class': "form-control form-control-sm"}),
-                                     empty_label=None)
+
     class Meta:
         model = Medicament
         fields = '__all__'
+
+    # def __init__(self, *args, **kwargs):
+    #     super(Medicament, self).__init__(*args, **kwargs)
+    #     self.fields['drug_form'].choices = list(DrugForm.objects.value_list('id', 'name'))
+    #     self.fields['dose_unit'].choices = list(DoseUnit.objects.value_list('id', 'name'))
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields['dose_unit'].queryset = DoseUnit.objects.none()
+    #     if 'drug_form' in self.data:
+    #         try:
+    #             drug_form_id = int(self.data.get('drug_form'))
+    #             self.fields['dose_unit'].queryset = DoseUnit.objects.filter(drug_form_id=drug_form_id).order_by('name')
+    #             print(self.fields['dose_unit'].queryset)
+    #         except(ValueError, TypeError):
+    #             pass
+    #     elif self.instance.pk:
+    #         self.fields['dose_unit'].queryset = self.instance.drug_form.dose_unit.order_by('name')
+    #         print(self.fields['dose_unit'].queryset)
 
 class PackForm(ModelForm):
     strip_of_tab = forms.CharField(widget=forms.TextInput(attrs=

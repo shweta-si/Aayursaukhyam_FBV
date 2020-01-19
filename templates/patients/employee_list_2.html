@@ -4,8 +4,10 @@
 	<td>{{ dtls.name }}</td>
 	<td>{{ dtls.gender }}</td>
 	<td>{{ dtls.blood_group }}</td>
-	{% if dtls.photo.name %} {{Employee.logo.url }}
-	<td><a href="/media/{{ dtls.photo.name }}" target="_blank"><img class="img-profile rounded-circle" src="/media/{{ dtls.photo.name }}" width="50" height="50"/></a></td>
+	{% if dtls.photo.name %}
+	<td><a href="{{ MEDIA_URL }}{{ dtls.photo.name }}" target="_blank"><img class="img-profile rounded-circle" src="{{ MEDIA_URL }}{{ dtls.photo.name }}" width="50" height="50"/></a></td>
+	{% else %}
+    <td><img class="img-profile rounded-circle" src="{{ MEDIA_URL }}no_image.jpg" width="50" height="50"/></td>
 	{% endif %}
 	<td>{{ dtls.address }} {{ dtls.email_id }} {{ dtls.telephone_line1 }}</td>
 	<td>{{ dtls.joining_date}}</td>
@@ -13,12 +15,12 @@
 	<td>
 		<button class="btn btn-success show-form-update" data-url="{% url 'employee_update' dtls.id %}">
 			<i class="fa fa-edit" aria-hidden="true"></i>
-			Edit 
+			Edit
 		</button>
 		<button class="btn btn-danger show-form-delete" data-url="{% url 'employee_delete' dtls.id %}">
 			<i class="fa fa-trash" aria-hidden="true"></i>
 			Delete
-		</button>	
+		</button>
 	</td>
 </tr>
 {% empty %}

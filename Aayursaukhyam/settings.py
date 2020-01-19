@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'patients',
     'crispy_forms',
     'tempus_dominus',
+
 ]
 
 MIDDLEWARE = [
@@ -124,6 +125,9 @@ USE_L10N = True
 USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+# (1.) File Uploading - Add in TEMPLATES list ---django.template.context_processor.media
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
@@ -136,6 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_collect')
 
 
 LOGIN_REDIRECT_URL ='home'
+LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
 
@@ -145,9 +150,8 @@ SESSION_SAVE_EVERY_REQUEST = True
 
 
 
-# (1.) File Uploading - Add in TEMPLATES list ---django.template.context_processor.media
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
 
 
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

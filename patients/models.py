@@ -1,7 +1,5 @@
 from django.db import models
-#from django.core.urlresolvers import reverse
-from django.urls import reverse
-#from django.contrib.auth.models import User
+
 from django.core.validators import RegexValidator
 from .validators import *  #custom validators ----> validators.py in your app -patient
 
@@ -138,11 +136,13 @@ class Designation(models.Model):
     def __str__(self):
         return self.name
 
+from PIL import Image
+from django.conf import settings
 class Employee(models.Model):
     name = models.CharField(max_length=30)
     gender = models.CharField(max_length=6, choices=GENDER_CHOICES, default='Male')
     blood_group = models.CharField(max_length=15, choices=BLOOD_GROUP_CHOICES)
-    photo = models.FileField(upload_to='employee/pics/', null=True, blank=True, validators=[validate_image_extension])
+    photo = models.ImageField(upload_to='employee/pics/', null=True, blank=True, validators=[validate_image_extension])
     address = models.TextField()
     email_id = models.EmailField()
     phone_regex = RegexValidator(regex=r'^\+?1?\d{10,12}$',
@@ -154,26 +154,23 @@ class Employee(models.Model):
     #city = models.TextField()
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)
 
-    @property
-    def photo_url(self):
-        if self.photo and hasattr(self.photo,'url'):
-            return self.photo.url
-
     def __str__(self):
         return self.name
 
-    #def get_absolute_url(self):
-        #return reverse('employee_list')
 
+    @property
+    def get_absolute_image_url(self):
+        print("s",self.photo.url)
+        return "{0}{1}".format(settings.MEDIA_URL, self.photo.url)
 
-    #def get_absolute_url(self):
-        #return reverse('category_detail', kwargs={'slug': self.slug})
-
-
-
-
-
-
+#Creating Thumbnail for our Image -- >Install Pillow
+    def save(self, *args, **kwargs):
+        super(Employee, self).save(*args, **kwargs)
+        img = Image.open(self.photo.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300, 300)
+            img.thumbnail(output_size)
+            img.save(self.photo.path)
 
 class DeptManager(models.Model):
     dept_no = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="Employee_DeptManager_no")
@@ -224,10 +221,17 @@ class DrugForm(models.Model):
     def __str__(self):
         return self.abbreviation
 
+    def save(self, *args, **kwargs):
+        for field_name in ['abbreviation']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super(DrugForm, self).save(*args, **kwargs)
+
 
 class Dose(models.Model):
     name = models.PositiveIntegerField()  # 500,400
-    abbreviation = models.CharField(max_length=5, unique=True)
+    #abbreviation = models.CharField(max_length=5, unique=True)
 
     def __str__(self):
         return str(self.name)
@@ -241,7 +245,6 @@ class DoseUnit(models.Model):
         return self.name
 
 
-
 class MFGCompany(models.Model):
     name = models.CharField(max_length=30, unique=True)
     abbreviation = models.CharField(max_length=5, unique=True)
@@ -249,21 +252,33 @@ class MFGCompany(models.Model):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        for field_name in ['abbreviation']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+        super(MFGCompany, self).save(*args, **kwargs)
+
 class MedicationDosage(models.Model):
-    # code = models.CharField(max_length=15, null=True, blank=True) #Code
     name = models.CharField(max_length=30, unique=True)  # Frequency
-    abbreviation = models.CharField(max_length=15, unique=True)  # Abbreviation
+    #abbreviation = models.CharField(max_length=15, unique=True)  # Abbreviation
 
     def __str__(self):
-        return self.name
-
+        return self.abbreviation
+# Make 1 times before meal --> 1TBM
+    @property
+    def abbreviation(self):
+        line = self.name
+        words = line.split()
+        letters = [word[0] for word in words]
+        return '%s' % ("".join(letters).upper())
 
 class Medicament(models.Model):
     name = models.CharField(max_length=20, unique=True)  # MedicineName 500mg TAB
     mfg_company = models.ForeignKey(MFGCompany, on_delete=models.CASCADE, related_name='MFGCompany_Medicament_related')
     expiry_date = models.DateField()
     batch_id = models.CharField(max_length=12, null=True, blank=True)
-    # dosage = models.ForeignKey(MedicationDosage) # Dosage Instructions
+    #dosage = models.ForeignKey(MedicationDosage) #Dosage Instructions
     drug_form = models.ForeignKey(DrugForm, on_delete=models.CASCADE, related_name='DrugForm_Medicament_related')
     dose = models.ForeignKey(Dose, on_delete=models.CASCADE, related_name='Dose_Medicament_related')
     dose_unit = models.ForeignKey(DoseUnit, on_delete=models.CASCADE, related_name='DoseUnit_Medicament_related')
@@ -271,6 +286,9 @@ class Medicament(models.Model):
     def __str__(self):
         return self.name
 
+    # @property
+    # def medicament_name(self):
+    #     return "%s %s" % (self.drug_form, self.name)
 
 
 class Pack(models.Model):  # for tablet box -10 tablet in a strip
